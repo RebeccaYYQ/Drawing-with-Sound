@@ -116,10 +116,11 @@ int getPos(float[] array) {
       arrayPos = i;
     }
   }
-
   //set some boundaries to remove noise
-  if (arrayPos > 48) {
-    arrayPos = 48;
+  if (arrayPos > 50) {
+    arrayPos = 50;
+  } else if (arrayPos < 5) {
+    arrayPos = 5;
   }
 
   return arrayPos;
