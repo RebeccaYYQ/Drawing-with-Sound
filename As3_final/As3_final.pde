@@ -19,12 +19,23 @@ int b = 0;
 int boxSize = 30;
 int gapBetween = 15;
 
-//for colours. Left to right
+//for the UI boxes. Left to right
 int column1 = gapBetween; 
 int column2 = column1 + boxSize + gapBetween; 
 int column3 = column2 + boxSize + gapBetween; 
 int column4 = column3 + boxSize + gapBetween;
 int column5 = column4 + boxSize + gapBetween;
+int column6 = column5 + boxSize + gapBetween;
+int column7 = column6 + boxSize + gapBetween;
+int column8 = column7 + boxSize + gapBetween;
+int column9 = column8 + boxSize + gapBetween;
+int column10 = column9 + boxSize + gapBetween;
+int column11 = column10 + boxSize + gapBetween;
+int column12 = column11 + boxSize + gapBetween;
+int column13 = column12 + boxSize + gapBetween;
+int column14 = column13 + boxSize + gapBetween;
+int column15 = column14 + boxSize + gapBetween;
+
 //remember the save button
 
 int bottomRowY = 455;
@@ -34,7 +45,7 @@ int topRowY = bottomRowY - boxSize - gapBetween;
 PImage img;
 
 void setup() {
-  size(700, 500);
+  size(690, 500);
   // Create an Input stream 
   fft = new FFT(this, bands);
   in = new AudioIn(this, 0);
@@ -88,13 +99,7 @@ void mousePressed() {
     g = 0;
     b = 0;
   } else if (mouseX > column5 && mouseX < column5+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
-    //println("white/clear");
+    //println("clear");
     drawGUI();
-  } else if (mouseX > 655 && mouseX < 655+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
-    println("save");
-    //save("test.png");
-    drawNewGUI();
-  } else if (mouseX > column5 && mouseX < column5+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
-    negativeImg();
   }
 }
