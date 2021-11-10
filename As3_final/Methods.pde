@@ -1,50 +1,40 @@
 void drawGUI() {
   background(255);
+  stroke(0);
+  strokeWeight(1);
+  strokeCap(ROUND);
+
   //the line that seperates GUI from drawing window
   line(0, topRowY-15, width, topRowY-15);
 
-  stroke(0);
   //----------COLOURS
-  //yellow
-  fill(255, 255, 0);
+  fill(254, 39, 18); //red
   rect(column1, topRowY, boxSize, boxSize);
-  //pink
-  fill(255, 0, 255);
+  fill(253, 83, 8); //red-orange
   rect(column2, topRowY, boxSize, boxSize);
-  //cyan
-  fill(0, 255, 255);
+  fill(249, 188, 2); //orange
   rect(column3, topRowY, boxSize, boxSize);
-  //--------------------------------------------------Filler
-  fill(255);
+  fill(255, 254, 50); //yellow
   rect(column4, topRowY, boxSize, boxSize);
-  fill(255);
+  fill(208, 233, 43); //light green
   rect(column5, topRowY, boxSize, boxSize);
-  fill(255);
+  fill(102, 177, 50); //green
   rect(column6, topRowY, boxSize, boxSize);
-  //red
-  fill(255, 0, 0);
+  fill(2, 145, 205); //light blue
   rect(column1, bottomRowY, boxSize, boxSize);
-  //green
-  fill(0, 255, 0);
+  fill(2, 71, 254); //blue
   rect(column2, bottomRowY, boxSize, boxSize);
-  //blue
-  fill(0, 0, 255);
+  fill(62, 1, 164); //blue-purple
   rect(column3, bottomRowY, boxSize, boxSize);
-  //black
-  fill(0);
+  fill(134, 1, 176); //purple
   rect(column4, bottomRowY, boxSize, boxSize);
-  //'clear' button
-  fill(255);
+  fill(167, 25, 75); //purple-red
   rect(column5, bottomRowY, boxSize, boxSize);
-  fill(0);
-  text("Clear", column5+1, bottomRowY+19);
-  //--------------------------------------------------Filler
-  fill(255);
+  fill(0); //black
   rect(column6, bottomRowY, boxSize, boxSize);
 
   //----------LINE THICKNESS AND SHAPE
   fill(255);
-  stroke(0);
   //default/very thin
   rect(column8, topRowY, boxSize, boxSize);
   line(column8+15, topRowY+15, column8+15, topRowY+15);
@@ -68,7 +58,7 @@ void drawGUI() {
   strokeWeight(16);
   line(column12+15, topRowY+15, column12+15, topRowY+15);
   strokeWeight(1);
-  
+
   //square
   strokeCap(SQUARE);
   //default/very thin
@@ -93,16 +83,20 @@ void drawGUI() {
   rect(column12, bottomRowY, boxSize, boxSize);
   strokeWeight(16);
   line(column12+7, bottomRowY+15, column12+23, bottomRowY+15);
-  
+
   //----------MENU
   strokeWeight(1);
   strokeCap(ROUND);
   //replay
   rect(column14, topRowY, boxSize, boxSize);
   //stop
-  rect(column14, bottomRowY, boxSize, boxSize);
+  //rect(column14, bottomRowY, boxSize, boxSize);
   //save
   rect(column15, topRowY, boxSize, boxSize);
+  fill(0);
+  text("Re- play", column14+4, topRowY+2, boxSize, boxSize);
+  //text("Stop", column14+3, bottomRowY+19);
+  text("Save", column15+2, topRowY+19);
 }
 
 //function to get the position of the highest frequency noise
@@ -126,6 +120,16 @@ int getPos(float[] array) {
   return arrayPos;
 }
 
+//function to provide feedback in the second stage of transforming data
+void feedbackBox(String text, int r, int g, int b) {
+  fill(r, g, b);
+    noStroke();
+    rect(column14-20, topRowY-48, 150, 28);
+    fill(0);
+    text(text, column14-gapBetween, topRowY-30);
+}
+
+
 //DISUSED METHODS AND CODE SNIPPETS
 //code that was used for testing, debugging, etc. Keeping here in case I need again
 
@@ -145,21 +149,21 @@ void getMax(float[] array) {
 }
 
 /* old draw function, that lets you draw as you click
-   //background(255);
-   fft.analyze(spectrum);
-   //getMax(spectrum);
-   
-   prevY = currentY;
-   tempY = getPos(spectrum);
-   currentY = (int)map(tempY, 0, 50, topRowY-15, 10);
-   
-   //drawing to the screen
-   stroke(r, g, b);
-   if (mousePressed) {
-   //if the mouse is below the drawable area, don't draw
-   //meant to prevent drawing due to users clicking on the UI buttons
-   if (mouseY < topRowY-15) {
-   line(mouseX, currentY, pmouseX, prevY);
-   }
-   }
-   */
+ //background(255);
+ fft.analyze(spectrum);
+ //getMax(spectrum);
+ 
+ prevY = currentY;
+ tempY = getPos(spectrum);
+ currentY = (int)map(tempY, 0, 50, topRowY-15, 10);
+ 
+ //drawing to the screen
+ stroke(r, g, b);
+ if (mousePressed) {
+ //if the mouse is below the drawable area, don't draw
+ //meant to prevent drawing due to users clicking on the UI buttons
+ if (mouseY < topRowY-15) {
+ line(mouseX, currentY, pmouseX, prevY);
+ }
+ }
+ */
