@@ -87,14 +87,15 @@ void draw() {
     ellipse(mouseX, currentY, 30, 30);
     lineX.add(mouseX);
     lineY.add(currentY);
-  } else {
+  } 
+  //the second stage of presenting data. Code below is to simulate a replay feature
+  else {
     /*
     the code below for drawing something in set time increments is adapted from Chrisir's code, 
      3rd post on https://forum.processing.org/one/topic/trying-to-delay-a-loop.html
      */
 
     //refresh the screen
-    background(255);
     drawGUI();
 
     //drawing the first line so there isn't an OutOfBounds error in the for loop below
@@ -105,16 +106,28 @@ void draw() {
     for (int i = 1; i < linesToDraw; i++) {
       line(lineX.get(i), lineY.get(i), lineX.get(i-1), lineY.get(i-1));
     }
+    //feedback text
+    fill(144, 255, 125);
+    noStroke();
+    rect(column14-20, topRowY-48, 150, 28);
+    fill(0);
+    text("Replaying...", column14-gapBetween, topRowY-30);
 
     //if current time - timeSinceLast is greater than 50ms, increment linesToDraw and reset timeSinceLastDraw
     if (millis ()- timeSinceLastLine >= 50) {
       timeSinceLastLine = millis();
       linesToDraw++;
     }
+
     //catch to prevent OutOfBounds error, and end the loop to prevent constant redraws
     if (linesToDraw > lineX.size() ) {
       linesToDraw=lineX.size();
       println("replay end");
+      fill(255, 125, 125);
+      noStroke();
+      rect(column14-20, topRowY-48, 150, 28);
+      fill(0);
+      text("Replay finished", column14-gapBetween, topRowY-30);
       noLoop();
     }
 
@@ -163,7 +176,6 @@ void mousePressed() {
       b = 0;
     } else if (mouseX > column5 && mouseX < column5+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
       //println("clear");
-      drawGUI();
     }
     //----------LINE THICKNESS AND SIZE
 
