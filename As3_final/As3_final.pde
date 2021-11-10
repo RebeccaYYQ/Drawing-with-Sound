@@ -13,15 +13,25 @@ AudioIn in;
 int bands = 512;
 float[] spectrum = new float[bands];
 
+//to switch to the second stage of transforming input data
+boolean firstStage = true;
+
+//Below variables for the replay function
+List<Integer> lineX = new ArrayList<Integer>();
+List<Integer> lineY = new ArrayList<Integer>();
+int linesToDraw = 1;
+int timeSinceLastLine;
+
 //for drawing lines
-//int prevY = 0;
 int tempY = 0;
 int currentY = 0;
 
-//for changing colour
+//for changing colour, thickness or shape
 int r = 0;
 int g = 0;
 int b = 0;
+int lineThickness = 1;
+int strokeType = ROUND;
 
 //for the UI
 int boxSize = 30;
@@ -47,14 +57,8 @@ int column15 = column14 + boxSize + gapBetween;
 int bottomRowY = 455;
 int topRowY = bottomRowY - boxSize - gapBetween;
 
-//to switch to the second stage of transforming input data
-boolean firstStage = true;
-
-//Below variables for the replay function
-List<Integer> lineX = new ArrayList<Integer>();
-List<Integer> lineY = new ArrayList<Integer>();
-int linesToDraw = 1;
-int timeSinceLastLine;
+//for feedback
+boolean saveNotif = false;
 
 void setup() {
   size(690, 500);
@@ -82,7 +86,7 @@ void draw() {
     tempY = getPos(spectrum);
     currentY = (int)map(tempY, 0, 50, topRowY-15, 10);
 
-    //presenting input
+    //presenting input, and storing data into the arrays
     fill(255, 0, 0);
     ellipse(mouseX, currentY, 30, 30);
     lineX.add(mouseX);
@@ -98,20 +102,20 @@ void draw() {
     //refresh the screen
     drawGUI();
 
+    stroke(r, g, b);
+    strokeWeight(lineThickness);
+    strokeCap(strokeType);
+
     //drawing the first line so there isn't an OutOfBounds error in the for loop below
     line(lineX.get(0), lineY.get(0), lineX.get(0), lineY.get(0));
 
-    //the loop to replay the lines, based on information stored in the ArrayLists.
+    //the loop to redraw the lines, based on information stored in the ArrayLists.
     //linesToDraw variable limits the amount that can be drawn
     for (int i = 1; i < linesToDraw; i++) {
       line(lineX.get(i), lineY.get(i), lineX.get(i-1), lineY.get(i-1));
     }
     //feedback text
-    fill(144, 255, 125);
-    noStroke();
-    rect(column14-20, topRowY-48, 150, 28);
-    fill(0);
-    text("Replaying...", column14-gapBetween, topRowY-30);
+    feedbackBox("Replaying...", 144, 255, 125);
 
     //if current time - timeSinceLast is greater than 50ms, increment linesToDraw and reset timeSinceLastDraw
     if (millis ()- timeSinceLastLine >= 50) {
@@ -123,14 +127,15 @@ void draw() {
     if (linesToDraw > lineX.size() ) {
       linesToDraw=lineX.size();
       println("replay end");
-      fill(255, 125, 125);
-      noStroke();
-      rect(column14-20, topRowY-48, 150, 28);
-      fill(0);
-      text("Replay finished", column14-gapBetween, topRowY-30);
+      //check to see if save is on, so feedback can be provided
+      if (saveNotif) {
+        feedbackBox("Image saved", 84, 217, 61);
+        saveNotif = false;
+      } else {
+        feedbackBox("Replay finished", 255, 125, 125);
+      }
       noLoop();
     }
-
     /*
     end of adapting someone's code
      */
@@ -154,36 +159,105 @@ void mousePressed() {
   //for the UI options in the output stage
   else {
     //----------COLOURS
-    if (mouseX > column1 && mouseX < column1+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
-      //println("Red");
-      r = 255;
-      g = 0;
-      b = 0;
+    if (mouseX > column1 && mouseX < column1+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
+      r = 254;  
+      g = 39;  
+      b = 18; //red
+    } else if (mouseX > column2 && mouseX < column2+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
+      r = 253;  
+      g = 83;  
+      b = 8; //red-orange
+    } else if (mouseX > column3 && mouseX < column3+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
+      r = 249;  
+      g = 188;  
+      b = 2; //orange
+    } else if (mouseX > column4 && mouseX < column4+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
+      r = 255;  
+      g = 254;  
+      b = 50; //yellow
+    } else if (mouseX > column5 && mouseX < column5+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
+      r = 208;  
+      g = 233;  
+      b = 43; //light green
+    } else if (mouseX > column6 && mouseX < column6+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
+      r = 102;  
+      g = 177;  
+      b = 50; //green
+    } else if (mouseX > column1 && mouseX < column1+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
+      r = 2;  
+      g = 145;  
+      b = 205; //light blue
     } else if (mouseX > column2 && mouseX < column2+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
-      //println("green");
-      r = 0;
-      g = 255;
-      b = 0;
+      r = 2;  
+      g = 71;  
+      b = 254; //blue
     } else if (mouseX > column3 && mouseX < column3+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
-      //println("blue");
-      r = 0;
-      g = 0;
-      b = 255;
+      r = 62;  
+      g = 1;  
+      b = 164; //blue-purple
     } else if (mouseX > column4 && mouseX < column4+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
-      //println("black");
-      r = 0;
-      g = 0;
-      b = 0;
+      r = 134;  
+      g = 1;  
+      b = 176; //purple
     } else if (mouseX > column5 && mouseX < column5+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
-      //println("clear");
+      r = 167;  
+      g = 25;  
+      b = 75; //purple-red
+    } else if (mouseX > column6 && mouseX < column6+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
+      r = 0;  
+      g = 0;  
+      b = 0; //black
     }
+
     //----------LINE THICKNESS AND SIZE
+    else if (mouseX > column8 && mouseX < column8+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
+      strokeType = ROUND;
+      lineThickness = 1;
+    } else if (mouseX > column9 && mouseX < column9+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
+      strokeType = ROUND;
+      lineThickness = 4;
+    } else if (mouseX > column10 && mouseX < column10+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
+      strokeType = ROUND;
+      lineThickness = 8;
+    } else if (mouseX > column11 && mouseX < column11+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
+      strokeType = ROUND;
+      lineThickness = 12;
+    } else if (mouseX > column12 && mouseX < column12+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
+      strokeType = ROUND;
+      lineThickness = 16;
+    } else if (mouseX > column8 && mouseX < column8+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
+      strokeType = SQUARE;
+      lineThickness = 1;
+    } else if (mouseX > column9 && mouseX < column9+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
+      strokeType = SQUARE;
+      lineThickness = 4;
+    } else if (mouseX > column10 && mouseX < column10+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
+      strokeType = SQUARE;
+      lineThickness = 8;
+    } else if (mouseX > column11 && mouseX < column11+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
+      strokeType = SQUARE;
+      lineThickness = 12;
+    } else if (mouseX > column12 && mouseX < column12+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
+      strokeType = SQUARE;
+      lineThickness = 16;
+    }
 
     //----------MENU
     else if (mouseX > column14 && mouseX < column14+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
       println("replay");
+      //reset the lineToDraw value, and start the draw loop again
       linesToDraw = 1;
       loop();
+    } else if (mouseX > column15 && mouseX < column15+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
+      println("Save an image");
+      //flip it to true, so the check within the draw loop would work
+      saveNotif = true;
+      redraw();
+      //below is so it saves a cropped image, without all the UI
+      save("Drawing.png");
+      PImage img = loadImage("Drawing.png");
+      PImage cropped = img.get(0, 0, width, 356);
+      cropped.save("Drawing.png");
     }
   }
 }
