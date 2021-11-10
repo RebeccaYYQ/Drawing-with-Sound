@@ -1,45 +1,34 @@
 void drawGUI() {
   background(255);
+  stroke(0);
+  
   //the line that seperates GUI from drawing window
   line(0, topRowY-15, width, topRowY-15);
-
-  stroke(0);
+  
   //----------COLOURS
-  //yellow
-  fill(255, 255, 0);
+  fill(254, 39, 18); //red
   rect(column1, topRowY, boxSize, boxSize);
-  //pink
-  fill(255, 0, 255);
+  fill(253, 83, 8); //red-orange
   rect(column2, topRowY, boxSize, boxSize);
-  //cyan
-  fill(0, 255, 255);
+  fill(251, 153, 2); //orange
   rect(column3, topRowY, boxSize, boxSize);
-  //--------------------------------------------------Filler
-  fill(255);
+  fill(249, 188, 2); //orange-yellow
   rect(column4, topRowY, boxSize, boxSize);
-  fill(255);
+  fill(255, 254, 50); //yellow
   rect(column5, topRowY, boxSize, boxSize);
-  fill(255);
+  fill(208, 233, 43); //light green
   rect(column6, topRowY, boxSize, boxSize);
-  //red
-  fill(255, 0, 0);
+  fill(102,177,50); //green
   rect(column1, bottomRowY, boxSize, boxSize);
-  //green
-  fill(0, 255, 0);
+  fill(2,145,205); //light blue
   rect(column2, bottomRowY, boxSize, boxSize);
-  //blue
-  fill(0, 0, 255);
+  fill(2,71,254); //blue
   rect(column3, bottomRowY, boxSize, boxSize);
-  //black
-  fill(0);
+  fill(62,1,164); //blue-purple
   rect(column4, bottomRowY, boxSize, boxSize);
-  //'clear' button
-  fill(255);
+  fill(134,1,176); //purple
   rect(column5, bottomRowY, boxSize, boxSize);
-  fill(0);
-  text("Clear", column5+1, bottomRowY+19);
-  //--------------------------------------------------Filler
-  fill(255);
+  fill(167,25,75); //purple-red
   rect(column6, bottomRowY, boxSize, boxSize);
 
   //----------LINE THICKNESS AND SHAPE
@@ -103,6 +92,10 @@ void drawGUI() {
   rect(column14, bottomRowY, boxSize, boxSize);
   //save
   rect(column15, topRowY, boxSize, boxSize);
+  fill(0);
+  text("Re- play", column14+4, topRowY+2, boxSize, boxSize);
+  text("Stop", column14+3, bottomRowY+19);
+  text("Save", column15+2, topRowY+19);
 }
 
 //function to get the position of the highest frequency noise
