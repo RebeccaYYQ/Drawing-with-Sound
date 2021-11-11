@@ -22,6 +22,15 @@ List<Integer> lineY = new ArrayList<Integer>();
 int linesToDraw = 1;
 int timeSinceLastLine;
 
+//arrays to store changed parameters in the second stage
+//i.e. if the user changes the visual appearance of the line at a certain point, store that so it can be displayed in the replay
+List<Integer> lineThicknessList = new ArrayList<Integer>();
+List<Integer> strokeTypeList = new ArrayList<Integer>();
+List<Integer> rList = new ArrayList<Integer>();
+List<Integer> gList = new ArrayList<Integer>();
+List<Integer> bList = new ArrayList<Integer>();
+List<Boolean> hasBeenUpdated = new ArrayList<Boolean>();
+
 //for drawing lines
 int tempY = 0;
 int currentY = 0;
@@ -94,17 +103,23 @@ void draw() {
   } 
   //the second stage of presenting data. Code below is to simulate a replay feature
   else {
-    /*
-    the code below for drawing something in set time increments is adapted from Chrisir's code, 
-     3rd post on https://forum.processing.org/one/topic/trying-to-delay-a-loop.html
-     */
+    //for everything in the X position array, fill the other arrays with filler values to avoid errors
+    for (int i = 0; i < lineX.size(); i++) {
+      lineThicknessList.add(1);
+      strokeTypeList.add(ROUND);
+      rList.add(0);
+      gList.add(0);
+      bList.add(0);
+      hasBeenUpdated.add(false);
+    }
 
     //refresh the screen
     drawGUI();
 
-    stroke(r, g, b);
-    strokeWeight(lineThickness);
-    strokeCap(strokeType);
+    /*
+    the code below for drawing something in set time increments is adapted from Chrisir's code, 
+     3rd post on https://forum.processing.org/one/topic/trying-to-delay-a-loop.html
+     */
 
     //drawing the first line so there isn't an OutOfBounds error in the for loop below
     line(lineX.get(0), lineY.get(0), lineX.get(0), lineY.get(0));
@@ -112,12 +127,26 @@ void draw() {
     //the loop to redraw the lines, based on information stored in the ArrayLists.
     //linesToDraw variable limits the amount that can be drawn
     for (int i = 1; i < linesToDraw; i++) {
+      //if that value has not been changed before, update it
+      if (hasBeenUpdated.get(i) == false) {
+        lineThicknessList.set(i, lineThickness);
+        strokeTypeList.set(i, strokeType);
+        rList.set(i, r);
+        gList.set(i, g);
+        bList.set(i, b);
+        hasBeenUpdated.set(i, true);
+      }
+      //display the line based on stored data
+      stroke(rList.get(i), gList.get(i), bList.get(i));
+      strokeCap(strokeTypeList.get(i));
+      strokeWeight(lineThicknessList.get(i));
       line(lineX.get(i), lineY.get(i), lineX.get(i-1), lineY.get(i-1));
     }
     //feedback text
     feedbackBox("Replaying...", 144, 255, 125);
 
     //if current time - timeSinceLast is greater than 50ms, increment linesToDraw and reset timeSinceLastDraw
+    //to create an appearance of animation
     if (millis ()- timeSinceLastLine >= 50) {
       timeSinceLastLine = millis();
       linesToDraw++;
@@ -258,6 +287,30 @@ void mousePressed() {
       PImage img = loadImage("Drawing.png");
       PImage cropped = img.get(0, 0, width, 356);
       cropped.save("Drawing.png");
+    } else if (mouseX > column14 && mouseX < column14+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
+      println("reset");
+      //start the loop again, but wipe everything in the parameter lists to start fresh
+      linesToDraw = 1;
+      lineThicknessList.clear();
+      strokeTypeList.clear();
+      rList.clear();
+      gList.clear();
+      bList.clear();
+      hasBeenUpdated.clear();
+      lineThickness = 1;
+      strokeType = ROUND;
+      r = 0;
+      g = 0;
+      b = 0;
+      for (int i = 0; i < lineX.size(); i++) {
+        lineThicknessList.add(1);
+        strokeTypeList.add(ROUND);
+        rList.add(0);
+        gList.add(0);
+        bList.add(0);
+        hasBeenUpdated.add(false);
+      }
+      loop();
     }
   }
 }
