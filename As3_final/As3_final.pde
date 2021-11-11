@@ -45,6 +45,7 @@ int strokeType = ROUND;
 //for the UI
 int boxSize = 30;
 int gapBetween = 15;
+int boxCurve = 10;
 
 //for the UI boxes. Left to right
 int column1 = gapBetween; 
@@ -85,7 +86,7 @@ void draw() {
   if (firstStage) {
     background(0);
     fill(255);
-    rect(column14, bottomRowY, boxSize*2+15, boxSize);
+    rect(column14, bottomRowY, boxSize*2+15, boxSize, boxCurve);
     fill(0);
     text("Next", column14+25, bottomRowY+19);
 
