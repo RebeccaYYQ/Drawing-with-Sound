@@ -1,60 +1,63 @@
 void drawGUI() {
   background(255);
-  stroke(0);
   strokeWeight(1);
   strokeCap(ROUND);
 
   //the line that seperates GUI from drawing window
-  line(0, topRowY-15, width, topRowY-15);
-
+  //grey bg rectangle to separate UI from drawing area
+  noStroke();
+  fill(200);
+  rect(0, topRowY-15, width, 105);
+  
+  stroke(0);
   //----------COLOURS
   fill(254, 39, 18); //red
-  rect(column1, topRowY, boxSize, boxSize);
+  rect(column1, topRowY, boxSize, boxSize, boxCurve);
   fill(253, 83, 8); //red-orange
-  rect(column2, topRowY, boxSize, boxSize);
+  rect(column2, topRowY, boxSize, boxSize, boxCurve);
   fill(249, 188, 2); //orange
-  rect(column3, topRowY, boxSize, boxSize);
+  rect(column3, topRowY, boxSize, boxSize, boxCurve);
   fill(255, 254, 50); //yellow
-  rect(column4, topRowY, boxSize, boxSize);
+  rect(column4, topRowY, boxSize, boxSize, boxCurve);
   fill(208, 233, 43); //light green
-  rect(column5, topRowY, boxSize, boxSize);
+  rect(column5, topRowY, boxSize, boxSize, boxCurve);
   fill(102, 177, 50); //green
-  rect(column6, topRowY, boxSize, boxSize);
+  rect(column6, topRowY, boxSize, boxSize, boxCurve);
   fill(2, 145, 205); //light blue
-  rect(column1, bottomRowY, boxSize, boxSize);
+  rect(column1, bottomRowY, boxSize, boxSize, boxCurve);
   fill(2, 71, 254); //blue
-  rect(column2, bottomRowY, boxSize, boxSize);
+  rect(column2, bottomRowY, boxSize, boxSize, boxCurve);
   fill(62, 1, 164); //blue-purple
-  rect(column3, bottomRowY, boxSize, boxSize);
+  rect(column3, bottomRowY, boxSize, boxSize, boxCurve);
   fill(134, 1, 176); //purple
-  rect(column4, bottomRowY, boxSize, boxSize);
+  rect(column4, bottomRowY, boxSize, boxSize, boxCurve);
   fill(167, 25, 75); //purple-red
-  rect(column5, bottomRowY, boxSize, boxSize);
+  rect(column5, bottomRowY, boxSize, boxSize, boxCurve);
   fill(0); //black
-  rect(column6, bottomRowY, boxSize, boxSize);
+  rect(column6, bottomRowY, boxSize, boxSize, boxCurve);
 
-  //----------LINE THICKNESS AND SHAPE
   fill(255);
+  //----------LINE THICKNESS AND SHAPE
   //default/very thin
-  rect(column8, topRowY, boxSize, boxSize);
+  rect(column8, topRowY, boxSize, boxSize, boxCurve);
   line(column8+15, topRowY+15, column8+15, topRowY+15);
   //thin
-  rect(column9, topRowY, boxSize, boxSize);
+  rect(column9, topRowY, boxSize, boxSize, boxCurve);
   strokeWeight(4);
   line(column9+15, topRowY+15, column9+15, topRowY+15);
   //medium
   strokeWeight(1);
-  rect(column10, topRowY, boxSize, boxSize);
+  rect(column10, topRowY, boxSize, boxSize, boxCurve);
   strokeWeight(8);
   line(column10+15, topRowY+15, column10+15, topRowY+15);
   //thick
   strokeWeight(1);
-  rect(column11, topRowY, boxSize, boxSize);
+  rect(column11, topRowY, boxSize, boxSize, boxCurve);
   strokeWeight(12);
   line(column11+15, topRowY+15, column11+15, topRowY+15);
   //very thick
   strokeWeight(1);
-  rect(column12, topRowY, boxSize, boxSize);
+  rect(column12, topRowY, boxSize, boxSize, boxCurve);
   strokeWeight(16);
   line(column12+15, topRowY+15, column12+15, topRowY+15);
   strokeWeight(1);
@@ -62,25 +65,25 @@ void drawGUI() {
   //square
   strokeCap(SQUARE);
   //default/very thin
-  rect(column8, bottomRowY, boxSize, boxSize);
+  rect(column8, bottomRowY, boxSize, boxSize,boxCurve);
   line(column8+15, bottomRowY+15, column8+16, bottomRowY+15);
   //thin
-  rect(column9, bottomRowY, boxSize, boxSize);
+  rect(column9, bottomRowY, boxSize, boxSize, boxCurve);
   strokeWeight(4);
   line(column9+13, bottomRowY+15, column9+17, bottomRowY+15);
   //medium
   strokeWeight(1);
-  rect(column10, bottomRowY, boxSize, boxSize);
+  rect(column10, bottomRowY, boxSize, boxSize, boxCurve);
   strokeWeight(8);
   line(column10+11, bottomRowY+15, column10+19, bottomRowY+15);
   //thick
   strokeWeight(1);
-  rect(column11, bottomRowY, boxSize, boxSize);
+  rect(column11, bottomRowY, boxSize, boxSize, boxCurve);
   strokeWeight(12);
   line(column11+9, bottomRowY+15, column11+21, bottomRowY+15);
   //very thick
   strokeWeight(1);
-  rect(column12, bottomRowY, boxSize, boxSize);
+  rect(column12, bottomRowY, boxSize, boxSize, boxCurve);
   strokeWeight(16);
   line(column12+7, bottomRowY+15, column12+23, bottomRowY+15);
 
@@ -88,13 +91,13 @@ void drawGUI() {
   strokeWeight(1);
   strokeCap(ROUND);
   //replay
-  rect(column14, topRowY, boxSize, boxSize);
+  rect(column14, topRowY, boxSize, boxSize, boxCurve);
   //reset
-  rect(column14, bottomRowY, boxSize, boxSize);
-  //save
-  rect(column15, topRowY, boxSize, boxSize);
+  rect(column14, bottomRowY, boxSize, boxSize, boxCurve);
+  //
+  rect(column15, topRowY, boxSize, boxSize,boxCurve);
   fill(0);
-  text("Re- play", column14+4, topRowY+2, boxSize, boxSize);
+  text("Re- play", column14+4, topRowY+1, boxSize, boxSize);
   text("Re- set", column14+5, bottomRowY+2, boxSize, boxSize);
   text("Save", column15+2, topRowY+19);
 }
