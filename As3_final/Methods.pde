@@ -89,13 +89,13 @@ void drawGUI() {
   strokeCap(ROUND);
   //replay
   rect(column14, topRowY, boxSize, boxSize);
-  //stop
-  //rect(column14, bottomRowY, boxSize, boxSize);
+  //reset
+  rect(column14, bottomRowY, boxSize, boxSize);
   //save
   rect(column15, topRowY, boxSize, boxSize);
   fill(0);
   text("Re- play", column14+4, topRowY+2, boxSize, boxSize);
-  //text("Stop", column14+3, bottomRowY+19);
+  text("Re- set", column14+5, bottomRowY+2, boxSize, boxSize);
   text("Save", column15+2, topRowY+19);
 }
 
@@ -123,10 +123,10 @@ int getPos(float[] array) {
 //function to provide feedback in the second stage of transforming data
 void feedbackBox(String text, int r, int g, int b) {
   fill(r, g, b);
-    noStroke();
-    rect(column14-20, topRowY-48, 150, 28);
-    fill(0);
-    text(text, column14-gapBetween, topRowY-30);
+  noStroke();
+  rect(column14-20, topRowY-48, 150, 28);
+  fill(0);
+  text(text, column14-gapBetween, topRowY-30);
 }
 
 
