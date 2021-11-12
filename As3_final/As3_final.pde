@@ -10,15 +10,17 @@ import java.util.*;
 //audio input
 FFT fft;
 AudioIn in;
+Amplitude amp;
 int bands = 512;
 float[] spectrum = new float[bands];
 
 //to switch to the second stage of transforming input data
 boolean firstStage = true;
+boolean secondStageSetup = true;
 
 //Below variables for the replay function
-List<Integer> lineX = new ArrayList<Integer>();
-List<Integer> lineY = new ArrayList<Integer>();
+List<Float> lineX = new ArrayList<Float>();
+List<Float> lineY = new ArrayList<Float>();
 int linesToDraw = 1;
 int timeSinceLastLine;
 
@@ -31,9 +33,10 @@ List<Integer> gList = new ArrayList<Integer>();
 List<Integer> bList = new ArrayList<Integer>();
 List<Boolean> hasBeenUpdated = new ArrayList<Boolean>();
 
-//for drawing lines
-int tempY = 0;
-int currentY = 0;
+//mapping input data
+float tempX = 0;
+float freqX = 0;
+float ampY = 0;
 
 //for changing colour, thickness or shape
 int r = 0;
@@ -74,11 +77,13 @@ void setup() {
   size(690, 500);
   //Create an Input stream 
   fft = new FFT(this, bands);
+  amp = new Amplitude(this);
   in = new AudioIn(this, 0);
 
   //start the Audio Input
   in.start();
   fft.input(in);
+  amp.input(in);
 }      
 
 void draw() { 
@@ -88,37 +93,44 @@ void draw() {
     textSize(16);
     fill(255);
     text("Instructions", column1+gapBetween, bottomRowY-25);
-    text("  Up and down: pitch of input sound", column1+gapBetween, bottomRowY-5);
-    text("  Left and right: mouse position", column1+gapBetween, bottomRowY+15);
+    text("  Up and down: volume", column1+gapBetween, bottomRowY-5);
+    text("  Left and right: pitch", column1+gapBetween, bottomRowY+15);
     rect(column14, bottomRowY, boxSize*2+15, boxSize, boxCurve);
     fill(0);
     textSize(12);
     textLeading(12);
     text("Next", column14+25, bottomRowY+19);
 
-    fft.analyze(spectrum);
-    
     //get the position of the highest frequency, then map it so it can be drawn
-    tempY = getPos(spectrum);
-    currentY = (int)map(tempY, 0, 50, topRowY-15, 10);
+    fft.analyze(spectrum);
+    tempX = getPos(spectrum);
+    freqX = map(tempX, 5, 50, 0, width-10);
+    //map the amplitude to y values. Lower volume = 'lower' position on the screen
+    float ampY = map(amp.analyze(), 0, 0.3, 356, 10);
 
     //presenting input as a moving circle, and store data into the arrays
     fill(255, 0, 0);
-    ellipse(mouseX, currentY, 30, 30);
-    lineX.add(mouseX);
-    lineY.add(currentY);
+    ellipse(freqX, ampY, 30, 30);
+    lineX.add(freqX);
+    lineY.add(ampY);
   } 
+  //setting up arrays and data cleanup before the second stage. Placed here so it runs only once
+  else if (firstStage == false && secondStageSetup == true) {
+    //setting up arrays with filler values
+    arraySetup();
+    //some noise removal. the X value often drops to 0, which can ruin the drawing
+    for (int i = 1; i < lineX.size(); i++) {
+      //if a datapoint = 0, and the value on either side of a datapoint is higher than 0, set it as the earlier value
+      //i.e. if that value is a sudden spike
+      if (lineX.get(i) == 0 && lineX.get(i-1) > 0 && lineX.get(i+1) > 0) {
+        lineX.set(i, lineX.get(i-1));
+      }
+    }
+    secondStageSetup = false;
+  }
+  
   //the second stage of presenting data
   else {
-    //for everything in the X position array, fill the other arrays with filler values to avoid errors
-    for (int i = 0; i < lineX.size(); i++) {
-      lineThicknessList.add(1);
-      strokeTypeList.add(ROUND);
-      rList.add(0);
-      gList.add(0);
-      bList.add(0);
-      hasBeenUpdated.add(false);
-    }
     //refresh the screen
     drawGUI();
 
@@ -182,10 +194,7 @@ void mousePressed() {
   //for the 'next' button' in the recording stage
   if (firstStage) {
     if (mouseX > column14 && mouseX < column15+boxSize && mouseY > bottomRowY && mouseY <bottomRowY+boxSize) {
-      //println("next");
-      background(255);
       drawGUI();
-
       //triggers the second stage, and sets the current time for the replay feature
       firstStage = false;
       timeSinceLastLine = millis();
@@ -306,14 +315,7 @@ void mousePressed() {
       r = 0;
       g = 0;
       b = 0;
-      for (int i = 0; i < lineX.size(); i++) {
-        lineThicknessList.add(1);
-        strokeTypeList.add(ROUND);
-        rList.add(0);
-        gList.add(0);
-        bList.add(0);
-        hasBeenUpdated.add(false);
-      }
+      arraySetup();
       loop();
     }
   }
