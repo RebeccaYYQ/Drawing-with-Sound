@@ -127,6 +127,19 @@ void feedbackBox(String text, int r, int g, int b) {
   text(text, column14-gapBetween, topRowY-30);
 }
 
+
+//for everything in the X position array, fill the other arrays with filler values to avoid errors
+void arraySetup() {
+  for (int i = 0; i < lineX.size(); i++) {
+    lineThicknessList.add(1);
+    strokeTypeList.add(ROUND);
+    rList.add(0);
+    gList.add(0);
+    bList.add(0);
+    hasBeenUpdated.add(false);
+  }
+}
+
 /*DISUSED CODE - used for testing, debugging, etc. Keeping here in case I need again
  
  ----old draw function, that lets you draw as you click
