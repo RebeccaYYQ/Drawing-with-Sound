@@ -2,13 +2,11 @@ void drawGUI() {
   background(255);
   strokeWeight(1);
   strokeCap(ROUND);
-
-  //the line that seperates GUI from drawing window
   //grey bg rectangle to separate UI from drawing area
   noStroke();
   fill(200);
   rect(0, topRowY-15, width, 105);
-  
+
   stroke(0);
   //----------COLOURS
   fill(254, 39, 18); //red
@@ -65,7 +63,7 @@ void drawGUI() {
   //square
   strokeCap(SQUARE);
   //default/very thin
-  rect(column8, bottomRowY, boxSize, boxSize,boxCurve);
+  rect(column8, bottomRowY, boxSize, boxSize, boxCurve);
   line(column8+15, bottomRowY+15, column8+16, bottomRowY+15);
   //thin
   rect(column9, bottomRowY, boxSize, boxSize, boxCurve);
@@ -90,12 +88,9 @@ void drawGUI() {
   //----------MENU
   strokeWeight(1);
   strokeCap(ROUND);
-  //replay
-  rect(column14, topRowY, boxSize, boxSize, boxCurve);
-  //reset
-  rect(column14, bottomRowY, boxSize, boxSize, boxCurve);
-  //
-  rect(column15, topRowY, boxSize, boxSize,boxCurve);
+  rect(column14, topRowY, boxSize, boxSize, boxCurve); //replay
+  rect(column14, bottomRowY, boxSize, boxSize, boxCurve); //reset
+  rect(column15, topRowY, boxSize, boxSize, boxCurve); //save
   fill(0);
   text("Re- play", column14+4, topRowY+1, boxSize, boxSize);
   text("Re- set", column14+5, bottomRowY+2, boxSize, boxSize);
@@ -119,7 +114,7 @@ int getPos(float[] array) {
   } else if (arrayPos < 5) {
     arrayPos = 5;
   }
-
+  //println("[" + arrayPos + "]" + " " + max);
   return arrayPos;
 }
 
@@ -132,29 +127,11 @@ void feedbackBox(String text, int r, int g, int b) {
   text(text, column14-gapBetween, topRowY-30);
 }
 
-
-//DISUSED METHODS AND CODE SNIPPETS
-//code that was used for testing, debugging, etc. Keeping here in case I need again
-
-//get the max and its position, specifically for the spectrum array
-void getMax(float[] array) {
-  float max = array[0];
-  int arrayPos = 0;
-
-  for (int i = 1; i < bands; i++) {
-    if (array[i] > max) {
-      max = array[i];
-      arrayPos = i;
-    }
-  }
-
-  println("[" + arrayPos + "]" + " " + max);
-}
-
-/* old draw function, that lets you draw as you click
+/*DISUSED CODE - used for testing, debugging, etc. Keeping here in case I need again
+ 
+ ----old draw function, that lets you draw as you click
  //background(255);
  fft.analyze(spectrum);
- //getMax(spectrum);
  
  prevY = currentY;
  tempY = getPos(spectrum);
@@ -168,5 +145,4 @@ void getMax(float[] array) {
  if (mouseY < topRowY-15) {
  line(mouseX, currentY, pmouseX, prevY);
  }
- }
- */
+ } */

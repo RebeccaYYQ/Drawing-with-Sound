@@ -47,7 +47,7 @@ int boxSize = 30;
 int gapBetween = 15;
 int boxCurve = 10;
 
-//for the UI boxes. Left to right
+//for the UI boxes
 int column1 = gapBetween; 
 int column2 = column1 + boxSize + gapBetween; 
 int column3 = column2 + boxSize + gapBetween; 
@@ -72,11 +72,11 @@ boolean saveNotif = false;
 
 void setup() {
   size(690, 500);
-  // Create an Input stream 
+  //Create an Input stream 
   fft = new FFT(this, bands);
   in = new AudioIn(this, 0);
 
-  // start the Audio Input
+  //start the Audio Input
   in.start();
   fft.input(in);
 }      
@@ -85,24 +85,30 @@ void draw() {
   //for the first stage of recording
   if (firstStage) {
     background(0);
+    textSize(16);
     fill(255);
+    text("Instructions", column1+gapBetween, bottomRowY-25);
+    text("  Up and down: pitch of input sound", column1+gapBetween, bottomRowY-5);
+    text("  Left and right: mouse position", column1+gapBetween, bottomRowY+15);
     rect(column14, bottomRowY, boxSize*2+15, boxSize, boxCurve);
     fill(0);
+    textSize(12);
+    textLeading(12);
     text("Next", column14+25, bottomRowY+19);
 
     fft.analyze(spectrum);
-    //getMax(spectrum);
-
+    
+    //get the position of the highest frequency, then map it so it can be drawn
     tempY = getPos(spectrum);
     currentY = (int)map(tempY, 0, 50, topRowY-15, 10);
 
-    //presenting input, and storing data into the arrays
+    //presenting input as a moving circle, and store data into the arrays
     fill(255, 0, 0);
     ellipse(mouseX, currentY, 30, 30);
     lineX.add(mouseX);
     lineY.add(currentY);
   } 
-  //the second stage of presenting data. Code below is to simulate a replay feature
+  //the second stage of presenting data
   else {
     //for everything in the X position array, fill the other arrays with filler values to avoid errors
     for (int i = 0; i < lineX.size(); i++) {
@@ -113,7 +119,6 @@ void draw() {
       bList.add(0);
       hasBeenUpdated.add(false);
     }
-
     //refresh the screen
     drawGUI();
 
@@ -172,7 +177,7 @@ void draw() {
   }
 }
 
-//UI stuff
+//for a functioning UI interface. 
 void mousePressed() {  
   //for the 'next' button' in the recording stage
   if (firstStage) {
@@ -181,12 +186,12 @@ void mousePressed() {
       background(255);
       drawGUI();
 
-      //triggers the second stage, and sets the current time
+      //triggers the second stage, and sets the current time for the replay feature
       firstStage = false;
       timeSinceLastLine = millis();
     }
   }
-  //for the UI options in the output stage
+  //for the UI options in the second stage
   else {
     //----------COLOURS
     if (mouseX > column1 && mouseX < column1+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
@@ -238,7 +243,6 @@ void mousePressed() {
       g = 0;  
       b = 0; //black
     }
-
     //----------LINE THICKNESS AND SIZE
     else if (mouseX > column8 && mouseX < column8+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
       strokeType = ROUND;
@@ -271,7 +275,6 @@ void mousePressed() {
       strokeType = SQUARE;
       lineThickness = 16;
     }
-
     //----------MENU
     else if (mouseX > column14 && mouseX < column14+boxSize && mouseY > topRowY && mouseY <topRowY+boxSize) {
       println("replay");
